@@ -1,8 +1,15 @@
 name: fafo_dev
 
 services:
+  # Minimal container that owns the shared network namespace
+  # Rarely changes, so it won't trigger cascade recreations
+  net:
+    image: alpine:latest
+    command: sleep infinity
+
   devcontainer:
     image: mcr.microsoft.com/devcontainers/base:ubuntu
+    network_mode: service:net
     volumes:
       # ../../ assumes the -space/main folder convention.
       # For repos opened directly, change to ..:/workspaces:cached
