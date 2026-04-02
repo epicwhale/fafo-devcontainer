@@ -1,0 +1,10 @@
+name: fafo_dev
+
+services:
+  devcontainer:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu
+    volumes:
+      # ../../ assumes the -space/main folder convention.
+      # For repos opened directly, change to ..:/workspaces:cached
+      - ../../:/workspaces:cached
+    command: sleep infinity

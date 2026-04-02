@@ -1,0 +1,63 @@
+{
+    "name": "fafo-stack",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "devcontainer",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "shutdownAction": "stopCompose",
+    "remoteUser": "vscode",
+    "containerUser": "vscode",
+    // ----------
+    "features": {
+        // ------ Shell setup ------
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            // https://github.com/devcontainers/features/blob/main/src/common-utils/README.md
+            "installZsh": true,
+            "installOhMyZsh": true,
+            "installOhMyZshConfig": true,
+            "configureZshAsDefaultShell": true
+        },
+        "ghcr.io/devcontainers-extra/features/fd:1": {},
+        "ghcr.io/devcontainers-extra/features/ripgrep:1": {},
+        "ghcr.io/devcontainers-extra/features/fzf:1": {},
+        "ghcr.io/devcontainers-extra/features/eza:1": {},
+        "ghcr.io/devcontainers-extra/features/zsh-plugins:0": {
+            "plugins": "fzf eza zoxide",
+            "omzPlugins": ""
+        },
+        "ghcr.io/devcontainers-extra/features/starship:1": {},
+
+        // ------ Node — runtime for AI CLIs (Gemini, Codex, opencode). Brings npm + pnpm + yarn. ------
+        "ghcr.io/devcontainers/features/node:1": {},
+
+        // ------ Dev tools ------
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    },
+    "mounts": [
+        "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
+        "source=gemini-config-${devcontainerId},target=/home/vscode/.gemini,type=volume",
+        "source=codex-config-${devcontainerId},target=/home/vscode/.codex,type=volume",
+        "source=agents-config-${devcontainerId},target=/home/vscode/.agents,type=volume",
+        "source=opencode-data-${devcontainerId},target=/home/vscode/.opencode-data,type=volume",
+        "source=opencode-config-${devcontainerId},target=/home/vscode/.opencode-config,type=volume"
+    ],
+    "containerEnv": {
+        "EDITOR": "code --wait",
+        "CLAUDE_CONFIG_DIR": "/home/vscode/.claude" // prevents Claude Code from creating ~/.claude.json
+    },
+    "postCreateCommand": {
+        // ---- AI Code Assistants ----
+        "claude-code-install": "curl -fsSL https://claude.ai/install.sh | bash",
+        "ai-cli-install": "npm install -g @google/gemini-cli@preview @openai/codex opencode-ai",
+        "ai-tools-volumes-fix-ownership": "sudo chown -R vscode:vscode /home/vscode/.claude /home/vscode/.gemini /home/vscode/.codex /home/vscode/.agents /home/vscode/.opencode-data /home/vscode/.opencode-config",
+        "opencode-data-symlink": "mkdir -p ~/.local/share && ln -sfn ~/.opencode-data ~/.local/share/opencode",
+        "opencode-config-symlink": "mkdir -p ~/.config && ln -sfn ~/.opencode-config ~/.config/opencode",
+
+        // ---- Shell configuration ----
+        "starship-setup": "echo 'eval \"$(starship init zsh)\"' >> ~/.zshrc && mkdir -p ~/.config && cp .devcontainer/scripts/starship.toml ~/.config/starship.toml",
+        "zoxide-setup": "curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh",
+        "ai-aliases": "printf '%s\\n' 'alias cy=\"claude --dangerously-skip-permissions\"' 'alias csy=\"claude --dangerously-skip-permissions --model sonnet\"' 'alias gy=\"gemini --yolo\"' 'alias xy=\"codex --yolo\"' >> ~/.zshrc"
+    }
+    // No VS Code extensions — project-specific
+    // No forwarded ports — project-specific
+}
