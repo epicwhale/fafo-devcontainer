@@ -39,13 +39,13 @@ Use the `devcontainer` CLI to build and verify without VS Code:
 
 ```sh
 # Build and start the container
-devcontainer up --workspace-folder .
+devcontainer up
 
 # Run commands inside it
-devcontainer exec --workspace-folder . zsh -c 'claude --version && gemini --version'
+devcontainer exec zsh -c 'claude --version && gemini --version'
 
 # Run a full verification
-devcontainer exec --workspace-folder . zsh -c '
+devcontainer exec zsh -c '
   fd --version && rg --version && fzf --version && eza --version && zoxide --version &&
   node --version && npm --version && pnpm --version &&
   claude --version && gemini --version && codex --version &&

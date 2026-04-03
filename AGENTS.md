@@ -16,13 +16,13 @@ Requires Docker and the `devcontainer` CLI (`npm install -g @devcontainers/cli`)
 
 ```sh
 # Build and start
-devcontainer up --workspace-folder .
+devcontainer up
 
 # Verify tools are working
-devcontainer exec --workspace-folder . zsh -c 'claude --version && gemini --version && codex --version && node --version && gh --version && docker --version'
+devcontainer exec zsh -c 'claude --version && gemini --version && codex --version && node --version && gh --version && docker --version'
 
 # Interactive shell
-devcontainer exec --workspace-folder . zsh
+devcontainer exec zsh
 ```
 
 ## Conventions
