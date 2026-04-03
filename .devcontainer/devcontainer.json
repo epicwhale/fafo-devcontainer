@@ -34,29 +34,15 @@
         "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
     },
     "mounts": [
-        "source=claude-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
-        "source=gemini-config-${devcontainerId},target=/home/vscode/.gemini,type=volume",
-        "source=codex-config-${devcontainerId},target=/home/vscode/.codex,type=volume",
-        "source=agents-config-${devcontainerId},target=/home/vscode/.agents,type=volume",
-        "source=opencode-data-${devcontainerId},target=/home/vscode/.opencode-data,type=volume",
-        "source=opencode-config-${devcontainerId},target=/home/vscode/.opencode-config,type=volume"
+        "source=ai-agents-data-${devcontainerId},target=/home/vscode/.ai-agents-data,type=volume"
     ],
     "containerEnv": {
         "EDITOR": "code --wait",
-        "CLAUDE_CONFIG_DIR": "/home/vscode/.claude" // prevents Claude Code from creating ~/.claude.json
+        "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
     },
     "postCreateCommand": {
-        // ---- AI Code Assistants ----
-        "claude-code-install": "curl -fsSL https://claude.ai/install.sh | bash",
-        "ai-cli-install": "npm install -g @google/gemini-cli@preview @openai/codex opencode-ai",
-        "ai-tools-volumes-fix-ownership": "sudo chown -R vscode:vscode /home/vscode/.claude /home/vscode/.gemini /home/vscode/.codex /home/vscode/.agents /home/vscode/.opencode-data /home/vscode/.opencode-config",
-        "opencode-data-symlink": "mkdir -p ~/.local/share && ln -sfn ~/.opencode-data ~/.local/share/opencode",
-        "opencode-config-symlink": "mkdir -p ~/.config && ln -sfn ~/.opencode-config ~/.config/opencode",
-
-        // ---- Shell configuration ----
-        "starship-setup": "echo 'eval \"$(starship init zsh)\"' >> ~/.zshrc && mkdir -p ~/.config && cp .devcontainer/scripts/starship.toml ~/.config/starship.toml",
-        "zoxide-setup": "curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh",
-        "ai-aliases": "printf '%s\\n' 'alias cy=\"claude --dangerously-skip-permissions\"' 'alias csy=\"claude --dangerously-skip-permissions --model sonnet\"' 'alias gy=\"gemini --yolo\"' 'alias xy=\"codex --yolo\"' >> ~/.zshrc"
+        "setup-ai-tools": "bash .devcontainer/scripts/setup-ai-tools.sh",
+        "setup-shell": "bash .devcontainer/scripts/setup-shell.sh"
     }
     // No VS Code extensions — project-specific
     // No forwarded ports — project-specific
