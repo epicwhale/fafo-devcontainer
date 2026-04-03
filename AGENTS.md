@@ -15,6 +15,10 @@ FAFO Stack — a copy-pasteable `.devcontainer/` package that provides an opinio
         starship.toml            # Starship prompt config
 ```
 
+## Important
+
+**All runtime commands must run inside the devcontainer** — use `devcontainer exec zsh -c '...'`, never run them on the host.
+
 ## Build and test
 
 Requires Docker and the `devcontainer` CLI (`npm install -g @devcontainers/cli`).
