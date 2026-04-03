@@ -1,20 +1,20 @@
 # FAFO Devcontainer
 
-Opinionated 0-to-1 devcontainer for yolo agentic coding with Claude, Codex, Gemini, and opencode ready to run in yolo mode, with obra/skills pre-instaled. Pre-configured volume to persist logins, configs, and conversation history across container rebuilds. Just drop the `.devcontainer/` folder into any repo and you're good to go.
+0-to-1 devcontainer ready to run in YOLO mode. Pre-configured with Claude, Codex, Gemini, and opencode with obra/superpowers pre-instaled. Persists persist logins, configs, and conversation history across container rebuilds. Just drop the `.devcontainer/` folder into any repo and you're good to go.
 
 ## Why
 
-I've found myself repeating the same devcontainer setup process - install the CLIs, configure shell, lose all your logins when the container rebuilds, do it again. 
+I found myself fighting with a swamp of configuration every time I wanted to spin up a devcontainer for agentic coding: installing CLIs, configuring shell, setting up volumes for persistent state (like logins, conversation history, ...), and so on. It was inertia I didn't like.
 
 ## What's in the box
 
 - **Coding CLIs** — Claude Code, Gemini CLI, OpenAI Codex, opencode — pre-installed with yolo-mode aliases
-- **Persistent state** — a named Docker volume keeps your logins, configs, and conversation history across container rebuilds
-- **Shell** — zsh + oh-my-zsh + starship prompt + fd, ripgrep, fzf, eza, zoxide
-- **Dev tools** — GitHub CLI, Docker-outside-of-Docker
 - **Superpowers** — [obra/superpowers](https://github.com/obra/superpowers) skills auto-installed for all four AI CLIs
+- **Persistent state** — named docker volume keeps your logins, configs, and conversation history across container rebuilds
+- **Shell** — zsh + starship + (fd, ripgrep, fzf, eza, zoxide)
 
-## Yolo aliases
+
+## YOLO Aliases
 
 | Alias | What it runs |
 |-------|-------------|
