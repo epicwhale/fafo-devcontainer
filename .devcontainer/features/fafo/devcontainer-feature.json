@@ -1,0 +1,41 @@
+{
+    "id": "fafo",
+    "version": "1.0.0",
+    "name": "FAFO Stack",
+    "description": "Shell ergonomics + AI coding CLIs with persistent state",
+    "dependsOn": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": true,
+            "installOhMyZsh": true,
+            "installOhMyZshConfig": true,
+            "configureZshAsDefaultShell": true
+        },
+        "ghcr.io/devcontainers-extra/features/fd:1": {},
+        "ghcr.io/devcontainers-extra/features/ripgrep:1": {},
+        "ghcr.io/devcontainers-extra/features/fzf:1": {},
+        "ghcr.io/devcontainers-extra/features/eza:1": {},
+        "ghcr.io/devcontainers-extra/features/zsh-plugins:0": {
+            "plugins": "fzf eza zoxide",
+            "omzPlugins": ""
+        },
+        "ghcr.io/devcontainers-extra/features/starship:1": {},
+        "ghcr.io/devcontainers/features/node:1": {}
+    },
+    "options": {
+        "installClaude":   { "type": "boolean", "default": true, "description": "Install Claude Code CLI" },
+        "installGemini":   { "type": "boolean", "default": true, "description": "Install Gemini CLI" },
+        "installCodex":    { "type": "boolean", "default": true, "description": "Install OpenAI Codex CLI" },
+        "installOpencode": { "type": "boolean", "default": true, "description": "Install OpenCode CLI" }
+    },
+    "mounts": [
+        {
+            "source": "fafo-data-${devcontainerId}",
+            "target": "/fafo-data",
+            "type": "volume"
+        }
+    ],
+    "containerEnv": {
+        "EDITOR": "code --wait"
+    },
+    "postCreateCommand": "/usr/local/share/fafo/post-create.sh"
+}
