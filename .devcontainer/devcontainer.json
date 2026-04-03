@@ -10,7 +10,7 @@
     "features": {
         "./features/fafo": {},
         "ghcr.io/devcontainers/features/github-cli:1": {},
-        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {} // comment out if you don't want docker access from inside devcontainer
     }
     // .... add yours here...
     
