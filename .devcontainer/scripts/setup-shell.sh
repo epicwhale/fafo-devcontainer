@@ -9,7 +9,11 @@ cp "$SCRIPT_DIR/starship.toml" "$HOME/.config/starship.toml"
 echo 'eval "$(starship init zsh)"' >> "$HOME/.zshrc"
 
 # --- Zoxide ---
-curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+if [ ! -x "$HOME/.local/bin/zoxide" ]; then
+    curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+else
+    echo "zoxide already installed, skipping."
+fi
 
 # --- AI aliases ---
 cat >> "$HOME/.zshrc" <<'EOF'
