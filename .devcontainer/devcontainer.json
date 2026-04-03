@@ -1,5 +1,5 @@
 {
-    "name": "fafo-devcontainer",
+    "name": "fafo-devcontainer", // rename as you like
     "dockerComposeFile": "docker-compose.yml",
     "service": "devcontainer",
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
@@ -12,10 +12,6 @@
         "ghcr.io/devcontainers/features/github-cli:1": {},
         "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
     }
-    // No mounts — declared by fafo feature
-    // No containerEnv — declared by fafo feature
-    // No postCreateCommand — declared by fafo feature
-    // Shell tools, node — auto-installed via fafo's dependsOn
-    // No VS Code extensions — project-specific
-    // No forwarded ports — project-specific
+    // .... add yours here...
+    
 }

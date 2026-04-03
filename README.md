@@ -1,10 +1,8 @@
-# FAFO Devcontainer
-
-0-to-1 devcontainer ready to run in YOLO mode. Pre-configured with Claude, Codex, Gemini, and opencode with obra/superpowers pre-instaled. Persists persist logins, configs, and conversation history across container rebuilds. Just drop the `.devcontainer/` folder into any repo and you're good to go.
+Modernized devcontainer setup with Claude, Codex, Gemini, and opencode that's ready to run in YOLO mode. For impatient builders. Pre-configured with obra/superpowers and sane defaults that persists persist logins, configs, and conversation history across container rebuilds. Just drop the `.devcontainer/` folder into any repo and you're good to go.
 
 ## Why
 
-I found myself fighting with a swamp of configuration every time I wanted to spin up a devcontainer for agentic coding: installing CLIs, configuring shell, setting up volumes for persistent state (like logins, conversation history, ...), and so on. It was inertia I didn't like.
+I found myself fighting with a swamp of configuration and long-build times every time I wanted to spin up a devcontainer for agentic coding: installing CLIs, configuring shell, setting up volumes for persistent state (like logins, conversation history, ...), and so on. It was inertia I didn't like.
 
 ## What's in the box
 
