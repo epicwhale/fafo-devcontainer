@@ -40,10 +40,7 @@
         "EDITOR": "code --wait",
         "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
     },
-    "postCreateCommand": {
-        "setup-ai-tools": "bash .devcontainer/scripts/setup-ai-tools.sh",
-        "setup-shell": "bash .devcontainer/scripts/setup-shell.sh"
-    }
+    "postCreateCommand": "bash .devcontainer/scripts/setup.sh"
     // No VS Code extensions — project-specific
     // No forwarded ports — project-specific
 }
