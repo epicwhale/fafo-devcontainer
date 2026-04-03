@@ -26,9 +26,11 @@ mkdir -p "$HOME/.local/share" "$HOME/.config"
 ln -sfn "$AI_DIR/opencode-data"   "$HOME/.local/share/opencode"
 ln -sfn "$AI_DIR/opencode-config" "$HOME/.config/opencode"
 
-# --- Install AI CLIs ---
-curl -fsSL https://claude.ai/install.sh | bash
+# --- Install AI CLIs (claude + npm in parallel) ---
+curl -fsSL https://claude.ai/install.sh | bash &
+CLAUDE_PID=$!
 npm install -g @google/gemini-cli@preview @openai/codex opencode-ai
+wait $CLAUDE_PID || { echo "Claude Code install failed"; exit 1; }
 
 # --- Install/update AI agent skills ---
 bash "$SCRIPT_DIR/setup-skills.sh"
