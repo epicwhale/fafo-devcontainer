@@ -1,68 +1,32 @@
-# FAFO Stack
+# FAFO Devcontainer
 
-An opinionated devcontainer starter for spinning up a fully loaded dev environment with zero project-specific opinions. Clone, reopen in container, start coding.
+Opinionated 0-to-1 devcontainer for yolo agentic coding with Claude, Codex, Gemini, and opencode ready to run in yolo mode, with obra/skills pre-instaled. Pre-configured volume to persist logins, configs, and conversation history across container rebuilds. Just drop the `.devcontainer/` folder into any repo and you're good to go.
 
-## Quickstart
+## Why
 
-1. Clone this repo (or copy `.devcontainer/` into an existing project)
-2. Open in VS Code
-3. `Dev Containers: Reopen in Container`
-4. Wait for build
-5. Start coding — shell, AI CLIs, and dev tools are ready
+I've found myself repeating the same devcontainer setup process - install the CLIs, configure shell, lose all your logins when the container rebuilds, do it again. 
 
-## What's included
+## What's in the box
 
-**Shell:** zsh + oh-my-zsh + starship prompt + fzf, fd, ripgrep, eza, zoxide
+- **Coding CLIs** — Claude Code, Gemini CLI, OpenAI Codex, opencode — pre-installed with yolo-mode aliases
+- **Persistent state** — a named Docker volume keeps your logins, configs, and conversation history across container rebuilds
+- **Shell** — zsh + oh-my-zsh + starship prompt + fd, ripgrep, fzf, eza, zoxide
+- **Dev tools** — GitHub CLI, Docker-outside-of-Docker
+- **Superpowers** — [obra/superpowers](https://github.com/obra/superpowers) skills auto-installed for all four AI CLIs
 
-**AI coding CLIs** (with persistent named volumes for config/state):
-- Claude Code (`cy` = yolo mode, `csy` = sonnet yolo)
-- Gemini CLI (`gy` = yolo mode)
-- OpenAI Codex (`xy` = yolo mode)
-- opencode
+## Yolo aliases
 
-**Dev tools:** GitHub CLI, Docker-outside-of-Docker
-
-**Node.js** (LTS) with npm, pnpm, yarn — installed as AI CLI runtime infrastructure, not as a project runtime opinion.
-
-## Aliases
-
-| Alias | Command |
-|-------|---------|
+| Alias | What it runs |
+|-------|-------------|
 | `cy`  | `claude --dangerously-skip-permissions` |
 | `csy` | `claude --dangerously-skip-permissions --model sonnet` |
 | `gy`  | `gemini --yolo` |
 | `xy`  | `codex --yolo` |
 
-## Testing changes
+## Quickstart
 
-Use the `devcontainer` CLI to build and verify without VS Code:
+1. Copy `.devcontainer/` into your repo (or clone this one)
+2. Open in VS Code → **Dev Containers: Reopen in Container**
+3. Start coding freely: type `cy`, `xy`, `gy`, or `opencode`
 
-```sh
-# Build and start the container
-devcontainer up
-
-# Run commands inside it
-devcontainer exec zsh -c 'claude --version && gemini --version'
-
-# Run a full verification
-devcontainer exec zsh -c '
-  fd --version && rg --version && fzf --version && eza --version && zoxide --version &&
-  node --version && npm --version && pnpm --version &&
-  claude --version && gemini --version && codex --version &&
-  gh --version && docker --version
-'
-```
-
-## Customizing for a project
-
-Add project-specific config to `.devcontainer/devcontainer.json`:
-
-- **Runtimes:** Add features like `ghcr.io/devcontainers-extra/features/uv:1`
-- **Ports:** Add `forwardPorts` and `portsAttributes`
-- **Extensions:** Add `customizations.vscode.extensions`
-- **Services:** Add services to `docker-compose.yml` (Redis, Postgres, etc.)
-- **postCreateCommand:** Add project setup commands (`uv sync`, `npm install`, etc.)
-
-## Workspace mount convention
-
-The compose file mounts `../../` to `/workspaces`, assuming a `-space/main` folder structure. For repos opened directly, change the volume mount in `docker-compose.yml` to `..:/workspaces:cached`.
+Using devcontainer cli? `devcontainer up` then `devcontainer exec zsh`.
