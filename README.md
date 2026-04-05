@@ -23,7 +23,12 @@ I found myself fighting with a swamp of configuration and long-build times every
 
 ## Quickstart
 
-1. Copy `.devcontainer/` into your repo (or clone this one)
+1. Copy `.devcontainer/` into your repo root:
+
+   ```bash
+   git clone --depth 1 https://github.com/epicwhale/fafo-devcontainer.git _fafo-tmp && mv _fafo-tmp/.devcontainer . && rm -rf _fafo-tmp
+   ```
+
 2. Open in VS Code → **Dev Containers: Reopen in Container**
 3. Start coding freely: type `cy`, `xy`, `gy`, or `opencode`
 
