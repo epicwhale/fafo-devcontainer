@@ -1,4 +1,4 @@
-Modernized devcontainer setup with Claude, Codex, Gemini, and opencode that's ready to run in YOLO mode. For impatient builders. Pre-configured with obra/superpowers and sane defaults that persists persist logins, configs, and conversation history across container rebuilds. Just drop the `.devcontainer/` folder into any repo and you're good to go.
+Modernized devcontainer setup with Claude, Codex, Gemini, and opencode that's ready to run in YOLO mode. Pre-configured with [obra/superpowers](https://github.com/obra/superpowers) and sane defaults that persists logins, configs, and conversation history across container rebuilds. Just drop the `.devcontainer/` folder into any repo and you're good to go.
 
 ## Why
 
