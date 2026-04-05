@@ -14,22 +14,46 @@ mkdir -p \
   "$FAFO_DATA/agents" \
   "$FAFO_DATA/opencode-data" \
   "$FAFO_DATA/opencode-config" \
-  "$FAFO_DATA/bin" \
   "$FAFO_DATA/npm-cache" \
   "$FAFO_DATA/claude-share"
 
 # --- Symlinks from expected paths into the volume ---
-ln -sfn "$FAFO_DATA/claude"         "$HOME/.claude"
-ln -sfn "$FAFO_DATA/gemini"         "$HOME/.gemini"
-ln -sfn "$FAFO_DATA/codex"          "$HOME/.codex"
-ln -sfn "$FAFO_DATA/agents"         "$HOME/.agents"
+# Note: $HOME/.local/bin is NOT symlinked — claude installs there at image
+# build time as a real directory, and symlinking would shadow the binary.
+#
+# Some of these target dirs (.claude, .local/share/claude, .npm) are created
+# at image build time by the claude/npm installers running as the remote user.
+# link_into_volume() migrates their contents into the volume (non-destructively,
+# preserving any existing volume state) before replacing with the symlink.
+link_into_volume() {
+    local source="$1"  # path inside /fafo-data
+    local target="$2"  # $HOME path that should become a symlink
+
+    if [ -L "$target" ] && [ "$(readlink "$target")" = "$source" ]; then
+        return  # already correct
+    fi
+
+    if [ -d "$target" ] && [ ! -L "$target" ]; then
+        # Drop any broken symlinks from prior runs, then merge into the volume
+        find "$target" -xtype l -delete 2>/dev/null || true
+        mkdir -p "$source"
+        cp -an "$target"/. "$source"/ 2>/dev/null || true
+        rm -rf "$target"
+    fi
+
+    ln -sfn "$source" "$target"
+}
 
 mkdir -p "$HOME/.local" "$HOME/.local/share" "$HOME/.config"
-ln -sfn "$FAFO_DATA/bin"             "$HOME/.local/bin"
-ln -sfn "$FAFO_DATA/npm-cache"       "$HOME/.npm"
-ln -sfn "$FAFO_DATA/claude-share"    "$HOME/.local/share/claude"
-ln -sfn "$FAFO_DATA/opencode-data"   "$HOME/.local/share/opencode"
-ln -sfn "$FAFO_DATA/opencode-config" "$HOME/.config/opencode"
+
+link_into_volume "$FAFO_DATA/claude"           "$HOME/.claude"
+link_into_volume "$FAFO_DATA/gemini"           "$HOME/.gemini"
+link_into_volume "$FAFO_DATA/codex"            "$HOME/.codex"
+link_into_volume "$FAFO_DATA/agents"           "$HOME/.agents"
+link_into_volume "$FAFO_DATA/npm-cache"        "$HOME/.npm"
+link_into_volume "$FAFO_DATA/claude-share"     "$HOME/.local/share/claude"
+link_into_volume "$FAFO_DATA/opencode-data"    "$HOME/.local/share/opencode"
+link_into_volume "$FAFO_DATA/opencode-config"  "$HOME/.config/opencode"
 
 # --- Install/update AI agent skills (best-effort — failures don't block container startup) ---
 
