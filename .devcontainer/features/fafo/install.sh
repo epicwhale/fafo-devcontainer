@@ -29,6 +29,17 @@ if [ "$(printf '%s\n%s\n' "$LAZYGIT_MIN_VERSION" "$LAZYGIT_INSTALLED" | sort -V 
     exit 1
 fi
 
+# lazydocker: system binary, install latest GitHub release to /usr/local/bin
+LAZYDOCKER_VERSION=$(curl -fsSL "https://api.github.com/repos/jesseduffield/lazydocker/releases/latest" \
+    | grep -Po '"tag_name": "v\K[^"]*')
+case "$(uname -m)" in
+    x86_64)  LAZYDOCKER_ARCH="x86_64" ;;
+    aarch64) LAZYDOCKER_ARCH="arm64"  ;;
+    *) echo "lazydocker: unsupported arch $(uname -m)" >&2; exit 1 ;;
+esac
+curl -fsSL "https://github.com/jesseduffield/lazydocker/releases/latest/download/lazydocker_${LAZYDOCKER_VERSION}_Linux_${LAZYDOCKER_ARCH}.tar.gz" \
+    | tar -xz -C /usr/local/bin lazydocker
+
 # Starship config: owned by the remote user
 install -o "$_REMOTE_USER" -g "$_REMOTE_USER" -m 755 -d "$_REMOTE_USER_HOME/.config"
 install -o "$_REMOTE_USER" -g "$_REMOTE_USER" -m 644 \
@@ -45,6 +56,7 @@ alias csy="claude --dangerously-skip-permissions --model sonnet"
 alias ay="agy --dangerously-skip-permissions"
 alias xy="codex --yolo"
 alias lzg="lazygit"
+alias lzd="lazydocker"
 ZSHRC
 fi
 
