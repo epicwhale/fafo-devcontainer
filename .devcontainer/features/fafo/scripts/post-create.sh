@@ -98,6 +98,19 @@ fi
 if ! grep -q 'multi_agent' "$HOME/.codex/config.toml" 2>/dev/null; then
   printf '\n[features]\nmulti_agent = true\n' >> "$HOME/.codex/config.toml"
 fi
+# Bypass bwrap sandbox on Ubuntu 24.04 hosts where AppArmor blocks unprivileged
+# user namespaces (kernel.apparmor_restrict_unprivileged_userns=1). Codex falls
+# back to the Landlock LSM, which doesn't need userns. Symptom without this:
+# `bwrap --dev-bind / / --tmpfs /tmp echo ok` fails with "No permissions to
+# create new namespace", and `codex exec` / `/codex:rescue` hang or fail silently.
+if ! grep -q 'use_legacy_landlock' "$HOME/.codex/config.toml" 2>/dev/null; then
+  if grep -q '^\[features\]' "$HOME/.codex/config.toml" 2>/dev/null; then
+    # multi_agent block above already added [features] header — append under it
+    sed -i '/^\[features\]/a use_legacy_landlock = true' "$HOME/.codex/config.toml"
+  else
+    printf '\n[features]\nuse_legacy_landlock = true\n' >> "$HOME/.codex/config.toml"
+  fi
+fi
 
 # --- Superpowers for OpenCode ---
 # --global installs to user config; --force handles both install and update
