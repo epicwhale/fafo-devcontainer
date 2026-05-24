@@ -120,6 +120,17 @@ if ! grep -q 'use_legacy_landlock' "$HOME/.codex/config.toml" 2>/dev/null; then
     printf '\n[features]\nuse_legacy_landlock = true\n' >> "$HOME/.codex/config.toml"
   fi
 fi
+# Enable Codex memories so context (preferences, conventions, pitfalls) carries
+# across threads. Not available in EEA/UK/CH at launch. Required team rules still
+# belong in AGENTS.md — memories are a local recall layer, not the source of truth.
+# https://developers.openai.com/codex/memories
+if ! grep -q '^memories = ' "$HOME/.codex/config.toml" 2>/dev/null; then
+  if grep -q '^\[features\]' "$HOME/.codex/config.toml" 2>/dev/null; then
+    sed -i '/^\[features\]/a memories = true' "$HOME/.codex/config.toml"
+  else
+    printf '\n[features]\nmemories = true\n' >> "$HOME/.codex/config.toml"
+  fi
+fi
 
 # --- Superpowers for OpenCode ---
 # --global installs to user config; --force handles both install and update
