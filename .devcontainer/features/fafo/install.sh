@@ -40,10 +40,16 @@ if [ "$INSTALLCLAUDE" = "true" ]; then
     CLAUDE_PID=$!
 fi
 
+if [ "$INSTALLOPENCODE" = "true" ]; then
+    # --no-modify-path: we expose the binary system-wide via a /usr/local/bin
+    # symlink below, so the installer doesn't need to edit .zshrc.
+    su "$_REMOTE_USER" -c "curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path" &
+    OPENCODE_PID=$!
+fi
+
 NPM_PKGS=""
-[ "$INSTALLGEMINI" = "true" ]   && NPM_PKGS="$NPM_PKGS @google/gemini-cli@preview"
-[ "$INSTALLCODEX" = "true" ]    && NPM_PKGS="$NPM_PKGS @openai/codex"
-[ "$INSTALLOPENCODE" = "true" ] && NPM_PKGS="$NPM_PKGS opencode-ai"
+[ "$INSTALLGEMINI" = "true" ] && NPM_PKGS="$NPM_PKGS @google/gemini-cli@preview"
+[ "$INSTALLCODEX" = "true" ]  && NPM_PKGS="$NPM_PKGS @openai/codex"
 if [ -n "$NPM_PKGS" ]; then
     # `su` resets PATH, and nvm isn't sourced in non-interactive user shells
     # at build time. Pass npm's bin dir through explicitly.
@@ -51,7 +57,14 @@ if [ -n "$NPM_PKGS" ]; then
     su "$_REMOTE_USER" -c "PATH=$NPM_BIN_DIR:\$PATH npm install -g $NPM_PKGS"
 fi
 
-[ -n "${CLAUDE_PID:-}" ] && wait "$CLAUDE_PID"
+[ -n "${CLAUDE_PID:-}" ]   && wait "$CLAUDE_PID"
+[ -n "${OPENCODE_PID:-}" ] && wait "$OPENCODE_PID"
+
+# opencode installs to $HOME/.opencode/bin (not on default PATH). Expose it
+# system-wide so post-create.sh and other non-interactive scripts can find it.
+if [ "$INSTALLOPENCODE" = "true" ]; then
+    ln -sfn "$_REMOTE_USER_HOME/.opencode/bin/opencode" /usr/local/bin/opencode
+fi
 
 # --- Bake runtime script into image ---
 mkdir -p /usr/local/share/fafo
