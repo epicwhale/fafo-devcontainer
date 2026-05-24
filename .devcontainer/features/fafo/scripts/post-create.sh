@@ -85,6 +85,15 @@ else
   claude plugin install codex@openai-codex || echo "⚠ Codex plugin install failed (non-fatal)"
 fi
 
+# --- DeepWiki MCP for Claude (free, no-auth, public-repo wiki + Q&A) ---
+# Skip if already present so a user-initiated `claude mcp remove deepwiki` sticks
+# across rebuilds — the user config lives in the persisted fafo-data volume.
+if ! claude mcp get deepwiki >/dev/null 2>&1; then
+  echo "Adding DeepWiki MCP server to Claude..."
+  claude mcp add -s user -t http deepwiki https://mcp.deepwiki.com/mcp \
+    || echo "⚠ Claude deepwiki MCP add failed (non-fatal)"
+fi
+
 # --- Antigravity (gemini-cli's successor) has no superpowers plugin. Clean up
 #     the now-orphan gemini-cli extension if a persisted volume still has it. ---
 rm -rf "$HOME/.gemini/extensions/superpowers"
@@ -130,6 +139,15 @@ if ! grep -q '^memories = ' "$HOME/.codex/config.toml" 2>/dev/null; then
   else
     printf '\n[features]\nmemories = true\n' >> "$HOME/.codex/config.toml"
   fi
+fi
+
+# --- DeepWiki MCP for Codex (free, no-auth, public-repo wiki + Q&A) ---
+# Skip if already present so a user-initiated `codex mcp remove deepwiki` sticks
+# across rebuilds — the global config lives in the persisted fafo-data volume.
+if ! codex mcp get deepwiki >/dev/null 2>&1; then
+  echo "Adding DeepWiki MCP server to Codex..."
+  codex mcp add deepwiki --url https://mcp.deepwiki.com/mcp \
+    || echo "⚠ Codex deepwiki MCP add failed (non-fatal)"
 fi
 
 # --- Superpowers for OpenCode ---
