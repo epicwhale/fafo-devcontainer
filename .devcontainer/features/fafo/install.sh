@@ -84,11 +84,18 @@ if [ "$INSTALLANTIGRAVITY" = "true" ]; then
     ANTIGRAVITY_PID=$!
 fi
 
-if [ "$INSTALLCODEX" = "true" ]; then
+if [ "$INSTALLCODEX" = "true" ] || [ "$INSTALLSKILLS" = "true" ]; then
     # `su` resets PATH, and nvm isn't sourced in non-interactive user shells
     # at build time. Pass npm's bin dir through explicitly.
     NPM_BIN_DIR="$(dirname "$(command -v npm)")"
+fi
+
+if [ "$INSTALLCODEX" = "true" ]; then
     su "$_REMOTE_USER" -c "PATH=$NPM_BIN_DIR:\$PATH npm install -g @openai/codex"
+fi
+
+if [ "$INSTALLSKILLS" = "true" ]; then
+    su "$_REMOTE_USER" -c "PATH=$NPM_BIN_DIR:\$PATH npm install -g skills"
 fi
 
 [ -n "${CLAUDE_PID:-}" ]       && wait "$CLAUDE_PID"

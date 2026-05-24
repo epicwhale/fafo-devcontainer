@@ -25,7 +25,8 @@
         "installClaude":      { "type": "boolean", "default": true, "description": "Install Claude Code CLI" },
         "installAntigravity": { "type": "boolean", "default": true, "description": "Install Google Antigravity CLI (successor to gemini-cli)" },
         "installCodex":       { "type": "boolean", "default": true, "description": "Install OpenAI Codex CLI" },
-        "installOpencode":    { "type": "boolean", "default": true, "description": "Install OpenCode CLI" }
+        "installOpencode":    { "type": "boolean", "default": true, "description": "Install OpenCode CLI" },
+        "installSkills":      { "type": "boolean", "default": true, "description": "Install the `skills` CLI (npm: skills)" }
     },
     "mounts": [
         {
