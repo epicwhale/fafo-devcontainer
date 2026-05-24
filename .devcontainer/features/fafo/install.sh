@@ -44,7 +44,7 @@ alias cy="claude --dangerously-skip-permissions"
 alias csy="claude --dangerously-skip-permissions --model sonnet"
 alias ay="agy --dangerously-skip-permissions"
 alias xy="codex --yolo"
-alias lg="lazygit"
+alias lzg="lazygit"
 ZSHRC
 fi
 
