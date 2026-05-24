@@ -15,7 +15,8 @@ mkdir -p \
   "$FAFO_DATA/opencode-data" \
   "$FAFO_DATA/opencode-config" \
   "$FAFO_DATA/npm-cache" \
-  "$FAFO_DATA/claude-share"
+  "$FAFO_DATA/claude-share" \
+  "$FAFO_DATA/gh"
 
 # --- Symlinks from expected paths into the volume ---
 # Note: $HOME/.local/bin is NOT symlinked — claude installs there at image
@@ -54,6 +55,7 @@ link_into_volume "$FAFO_DATA/npm-cache"        "$HOME/.npm"
 link_into_volume "$FAFO_DATA/claude-share"     "$HOME/.local/share/claude"
 link_into_volume "$FAFO_DATA/opencode-data"    "$HOME/.local/share/opencode"
 link_into_volume "$FAFO_DATA/opencode-config"  "$HOME/.config/opencode"
+link_into_volume "$FAFO_DATA/gh"               "$HOME/.config/gh"
 
 # --- Install/update AI agent skills (best-effort — failures don't block container startup) ---
 
