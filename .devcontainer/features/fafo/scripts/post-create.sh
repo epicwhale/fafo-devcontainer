@@ -72,6 +72,19 @@ else
   claude plugin install superpowers@claude-plugins-official || echo "⚠ Claude superpowers install failed (non-fatal)"
 fi
 
+# --- Codex plugin for Claude Code (provides /codex:rescue, /codex:review etc) ---
+if ! claude plugin marketplace list 2>/dev/null | grep -q "openai-codex"; then
+  echo "Adding Codex plugin marketplace..."
+  claude plugin marketplace add openai/codex-plugin-cc || echo "⚠ Codex marketplace add failed (non-fatal)"
+fi
+if claude plugin list 2>/dev/null | grep -q "codex@openai-codex"; then
+  echo "Updating codex plugin for Claude..."
+  claude plugin update codex@openai-codex || echo "⚠ Codex plugin update failed (non-fatal)"
+else
+  echo "Installing codex plugin for Claude..."
+  claude plugin install codex@openai-codex || echo "⚠ Codex plugin install failed (non-fatal)"
+fi
+
 # --- Superpowers for Gemini CLI ---
 if [ -d "$HOME/.gemini/extensions/superpowers" ]; then
   echo "Updating superpowers for Gemini..."
