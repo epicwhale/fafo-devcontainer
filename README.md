@@ -1,4 +1,4 @@
-Modernized devcontainer setup with Claude, Codex, Gemini, and opencode that's ready to run in YOLO mode. Pre-configured with [obra/superpowers](https://github.com/obra/superpowers) and sane defaults that persists logins, configs, and conversation history across container rebuilds. Just drop the `.devcontainer/` folder into any repo and you're good to go.
+Modernized devcontainer setup with Claude, Codex, Antigravity, and opencode that's ready to run in YOLO mode. Pre-configured with [obra/superpowers](https://github.com/obra/superpowers) and sane defaults that persists logins, configs, and conversation history across container rebuilds. Just drop the `.devcontainer/` folder into any repo and you're good to go.
 
 ## Why
 
@@ -6,8 +6,8 @@ I found myself fighting with a swamp of configuration and long-build times every
 
 ## What's in the box
 
-- **Coding CLIs** — Claude Code, Gemini CLI, OpenAI Codex, opencode — pre-installed with yolo-mode aliases
-- **Superpowers** — [obra/superpowers](https://github.com/obra/superpowers) skills auto-installed for all four AI CLIs
+- **Coding CLIs** — Claude Code, Google Antigravity (`agy`, gemini-cli's successor), OpenAI Codex, opencode — pre-installed with yolo-mode aliases
+- **Superpowers** — [obra/superpowers](https://github.com/obra/superpowers) skills auto-installed for Claude, Codex, and opencode (Antigravity has no superpowers plugin yet)
 - **Persistent state** — named docker volume keeps your logins, configs, and conversation history across container rebuilds
 - **Shell** — zsh + starship + (fd, ripgrep, fzf, eza, zoxide)
 
@@ -18,7 +18,7 @@ I found myself fighting with a swamp of configuration and long-build times every
 |-------|-------------|
 | `cy`  | `claude --dangerously-skip-permissions` |
 | `csy` | `claude --dangerously-skip-permissions --model sonnet` |
-| `gy`  | `gemini --yolo` |
+| `ay`  | `agy --dangerously-skip-permissions` |
 | `xy`  | `codex --yolo` |
 
 ## Quickstart
@@ -30,6 +30,6 @@ I found myself fighting with a swamp of configuration and long-build times every
    ```
 
 2. Open in VS Code → **Dev Containers: Reopen in Container**
-3. Start coding freely: type `cy`, `xy`, `gy`, or `opencode`
+3. Start coding freely: type `cy`, `xy`, `ay`, or `opencode`
 
 Using devcontainer cli? `devcontainer up` then `devcontainer exec zsh`.
