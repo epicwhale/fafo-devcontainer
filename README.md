@@ -9,7 +9,7 @@ I found myself fighting with a swamp of configuration and long-build times every
 - **Coding CLIs** — Claude Code, Google Antigravity (`agy`, gemini-cli's successor), OpenAI Codex, opencode — pre-installed with yolo-mode aliases
 - **Superpowers** — [obra/superpowers](https://github.com/obra/superpowers) skills auto-installed for Claude, Codex, and opencode (Antigravity has no superpowers plugin yet)
 - **Persistent state** — named docker volume keeps your logins, configs, and conversation history across container rebuilds
-- **Shell** — zsh + starship + (fd, ripgrep, fzf, eza, zoxide)
+- **Shell** — zsh + starship + (fd, ripgrep, fzf, eza, zoxide, lazygit aliased to `lg`)
 
 
 ## YOLO Aliases

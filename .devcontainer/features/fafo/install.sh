@@ -12,6 +12,23 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | \
     sh -s -- --bin-dir /usr/local/bin
 
+# lazygit: system binary, install latest GitHub release to /usr/local/bin
+LAZYGIT_MIN_VERSION=0.61.1
+LAZYGIT_VERSION=$(curl -fsSL "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" \
+    | grep -Po '"tag_name": "v\K[^"]*')
+case "$(uname -m)" in
+    x86_64)  LAZYGIT_ARCH="x86_64" ;;
+    aarch64) LAZYGIT_ARCH="arm64"  ;;
+    *) echo "lazygit: unsupported arch $(uname -m)" >&2; exit 1 ;;
+esac
+curl -fsSL "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_${LAZYGIT_ARCH}.tar.gz" \
+    | tar -xz -C /usr/local/bin lazygit
+LAZYGIT_INSTALLED=$(lazygit --version | grep -Po 'version=\K[0-9.]+')
+if [ "$(printf '%s\n%s\n' "$LAZYGIT_MIN_VERSION" "$LAZYGIT_INSTALLED" | sort -V | head -1)" != "$LAZYGIT_MIN_VERSION" ]; then
+    echo "lazygit: installed $LAZYGIT_INSTALLED is below required $LAZYGIT_MIN_VERSION" >&2
+    exit 1
+fi
+
 # Starship config: owned by the remote user
 install -o "$_REMOTE_USER" -g "$_REMOTE_USER" -m 755 -d "$_REMOTE_USER_HOME/.config"
 install -o "$_REMOTE_USER" -g "$_REMOTE_USER" -m 644 \
@@ -27,6 +44,7 @@ alias cy="claude --dangerously-skip-permissions"
 alias csy="claude --dangerously-skip-permissions --model sonnet"
 alias ay="agy --dangerously-skip-permissions"
 alias xy="codex --yolo"
+alias lg="lazygit"
 ZSHRC
 fi
 
