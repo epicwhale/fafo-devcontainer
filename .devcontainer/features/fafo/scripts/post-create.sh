@@ -94,19 +94,20 @@ else
   gemini extensions install https://github.com/obra/superpowers --auto-update --consent || echo "⚠ Gemini superpowers install failed (non-fatal)"
 fi
 
-# --- Superpowers for Codex ---
-if [ -d "$HOME/.codex/superpowers/.git" ]; then
-  echo "Updating superpowers for Codex..."
-  git -C "$HOME/.codex/superpowers" pull || echo "⚠ Codex superpowers update failed (non-fatal)"
-else
-  echo "Installing superpowers for Codex..."
-  if git clone https://github.com/obra/superpowers.git "$HOME/.codex/superpowers"; then
-    mkdir -p "$HOME/.agents/skills"
-    ln -sfn "$HOME/.codex/superpowers/skills" "$HOME/.agents/skills/superpowers"
-  else
-    echo "⚠ Codex superpowers install failed (non-fatal)"
-  fi
-fi
+# --- Superpowers for Codex (official curated plugin) ---
+# Migrate away from the previous git-clone install if a persisted volume
+# still has it around. Safe on fresh installs.
+rm -rf "$HOME/.codex/superpowers"
+rm -f "$HOME/.agents/skills/superpowers"
+
+# Codex auto-syncs the openai/plugins repo to ~/.codex/.tmp/plugins on any
+# invocation. Trigger that sync explicitly so `codex plugin add` can resolve
+# `superpowers@openai-curated` at build time.
+codex plugin marketplace list >/dev/null 2>&1 || true
+
+# `codex plugin add` is idempotent — re-running upgrades to the curated version.
+echo "Installing/updating superpowers for Codex..."
+codex plugin add superpowers@openai-curated || echo "⚠ Codex superpowers install failed (non-fatal)"
 # Enable multi-agent for subagent skills (dispatching-parallel-agents, subagent-driven-development)
 if ! grep -q 'multi_agent' "$HOME/.codex/config.toml" 2>/dev/null; then
   printf '\n[features]\nmulti_agent = true\n' >> "$HOME/.codex/config.toml"
