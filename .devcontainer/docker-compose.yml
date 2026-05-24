@@ -10,6 +10,7 @@ services:
   devcontainer:
     image: mcr.microsoft.com/devcontainers/base:ubuntu
     network_mode: service:net
+    init: true
     volumes:
       # ../../ mounts two levels up to support sibling repos in a monorepo setup. Adjust as needed.
       # For repos opened directly, change to ..:/workspaces:cached
