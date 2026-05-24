@@ -25,10 +25,12 @@ I found myself fighting with a swamp of configuration and long-build times every
 
 ## Quickstart
 
-1. Copy `.devcontainer/` into your repo root:
+1. Copy `.devcontainer/` into your repo root (also works to update an existing FAFO scaffold to the latest — re-running replaces `.devcontainer/`, so back up any local edits first):
 
    ```bash
-   git clone --depth 1 https://github.com/epicwhale/fafo-devcontainer.git _fafo-tmp && mv _fafo-tmp/.devcontainer . && rm -rf _fafo-tmp
+   rm -rf _fafo-tmp .devcontainer && \
+   git clone --depth 1 https://github.com/epicwhale/fafo-devcontainer.git _fafo-tmp && \
+   mv _fafo-tmp/.devcontainer . && rm -rf _fafo-tmp
    ```
 
 2. Open in VS Code → **Dev Containers: Reopen in Container**
