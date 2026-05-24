@@ -28,7 +28,7 @@ Requires Docker and the `devcontainer` CLI (`npm install -g @devcontainers/cli`)
 devcontainer up
 
 # Verify tools are working
-devcontainer exec zsh -c 'zsh --version && claude --version && gemini --version && codex --version && opencode --version && node --version && gh --version && docker --version'
+devcontainer exec zsh -c 'zsh --version && claude --version && agy --version && codex --version && opencode --version && node --version && gh --version && docker --version'
 
 # Interactive shell
 devcontainer exec zsh

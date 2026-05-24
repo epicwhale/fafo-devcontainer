@@ -85,14 +85,9 @@ else
   claude plugin install codex@openai-codex || echo "⚠ Codex plugin install failed (non-fatal)"
 fi
 
-# --- Superpowers for Gemini CLI ---
-if [ -d "$HOME/.gemini/extensions/superpowers" ]; then
-  echo "Updating superpowers for Gemini..."
-  gemini extensions update superpowers || echo "⚠ Gemini superpowers update failed (non-fatal)"
-else
-  echo "Installing superpowers for Gemini..."
-  gemini extensions install https://github.com/obra/superpowers --auto-update --consent || echo "⚠ Gemini superpowers install failed (non-fatal)"
-fi
+# --- Antigravity (gemini-cli's successor) has no superpowers plugin. Clean up
+#     the now-orphan gemini-cli extension if a persisted volume still has it. ---
+rm -rf "$HOME/.gemini/extensions/superpowers"
 
 # --- Superpowers for Codex (official curated plugin) ---
 # Migrate away from the previous git-clone install if a persisted volume

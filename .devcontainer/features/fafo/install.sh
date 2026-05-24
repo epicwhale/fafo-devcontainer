@@ -25,7 +25,7 @@ eval "$(starship init zsh)"
 export CLAUDE_CONFIG_DIR="$HOME/.claude"
 alias cy="claude --dangerously-skip-permissions"
 alias csy="claude --dangerously-skip-permissions --model sonnet"
-alias gy="gemini --yolo"
+alias ay="agy --dangerously-skip-permissions"
 alias xy="codex --yolo"
 ZSHRC
 fi
@@ -47,18 +47,23 @@ if [ "$INSTALLOPENCODE" = "true" ]; then
     OPENCODE_PID=$!
 fi
 
-NPM_PKGS=""
-[ "$INSTALLGEMINI" = "true" ] && NPM_PKGS="$NPM_PKGS @google/gemini-cli@preview"
-[ "$INSTALLCODEX" = "true" ]  && NPM_PKGS="$NPM_PKGS @openai/codex"
-if [ -n "$NPM_PKGS" ]; then
+if [ "$INSTALLANTIGRAVITY" = "true" ]; then
+    # Antigravity CLI (successor to gemini-cli — reads same ~/.gemini state).
+    # Binary `agy` lands in $HOME/.local/bin (same dir as claude).
+    su "$_REMOTE_USER" -c "curl -fsSL https://antigravity.google/cli/install.sh | bash" &
+    ANTIGRAVITY_PID=$!
+fi
+
+if [ "$INSTALLCODEX" = "true" ]; then
     # `su` resets PATH, and nvm isn't sourced in non-interactive user shells
     # at build time. Pass npm's bin dir through explicitly.
     NPM_BIN_DIR="$(dirname "$(command -v npm)")"
-    su "$_REMOTE_USER" -c "PATH=$NPM_BIN_DIR:\$PATH npm install -g $NPM_PKGS"
+    su "$_REMOTE_USER" -c "PATH=$NPM_BIN_DIR:\$PATH npm install -g @openai/codex"
 fi
 
-[ -n "${CLAUDE_PID:-}" ]   && wait "$CLAUDE_PID"
-[ -n "${OPENCODE_PID:-}" ] && wait "$OPENCODE_PID"
+[ -n "${CLAUDE_PID:-}" ]       && wait "$CLAUDE_PID"
+[ -n "${OPENCODE_PID:-}" ]     && wait "$OPENCODE_PID"
+[ -n "${ANTIGRAVITY_PID:-}" ]  && wait "$ANTIGRAVITY_PID"
 
 # opencode installs to $HOME/.opencode/bin (not on default PATH). Expose it
 # system-wide so post-create.sh and other non-interactive scripts can find it.
