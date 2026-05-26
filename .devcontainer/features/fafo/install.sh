@@ -6,6 +6,12 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# tmux: terminal multiplexer (Ubuntu 24.04 ships 3.4, one release behind upstream — fine for daily use)
+apt-get update -y
+DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tmux
+apt-get clean
+rm -rf /var/lib/apt/lists/*
+
 # --- Shell config (on top of what dependsOn features provide) ---
 
 # zoxide: system binary, install directly to /usr/local/bin

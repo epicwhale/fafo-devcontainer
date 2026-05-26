@@ -15,7 +15,7 @@
         "ghcr.io/devcontainers-extra/features/fzf:1": {},
         "ghcr.io/devcontainers-extra/features/eza:1": {},
         "ghcr.io/devcontainers-extra/features/zsh-plugins:0": {
-            "plugins": "fzf eza zoxide",
+            "plugins": "fzf eza zoxide tmux",
             "omzPlugins": ""
         },
         "ghcr.io/devcontainers-extra/features/starship:1": {},
