@@ -16,7 +16,8 @@ mkdir -p \
   "$FAFO_DATA/opencode-config" \
   "$FAFO_DATA/npm-cache" \
   "$FAFO_DATA/claude-share" \
-  "$FAFO_DATA/gh"
+  "$FAFO_DATA/gh" \
+  "$FAFO_DATA/zellij-config"
 
 # --- Symlinks from expected paths into the volume ---
 # Note: $HOME/.local/bin is NOT symlinked — claude installs there at image
@@ -56,6 +57,9 @@ link_into_volume "$FAFO_DATA/claude-share"     "$HOME/.local/share/claude"
 link_into_volume "$FAFO_DATA/opencode-data"    "$HOME/.local/share/opencode"
 link_into_volume "$FAFO_DATA/opencode-config"  "$HOME/.config/opencode"
 link_into_volume "$FAFO_DATA/gh"               "$HOME/.config/gh"
+# zellij: config + layouts only. ~/.cache/zellij is deliberately not persisted —
+# it's regenerable and version-keyed, so a stale cache is worse than none.
+link_into_volume "$FAFO_DATA/zellij-config"    "$HOME/.config/zellij"
 
 # --- Install/update AI agent skills (best-effort — failures don't block container startup) ---
 

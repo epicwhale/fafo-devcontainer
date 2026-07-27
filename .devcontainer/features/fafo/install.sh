@@ -12,6 +12,26 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tmux
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 
+# zellij: terminal multiplexer, peer to tmux (neither autostarts). Not packaged for
+# Ubuntu 24.04 and no upstream devcontainer feature exists, so install the static
+# musl build. Asset names don't embed the version, so /releases/latest/download/
+# resolves directly — no GitHub API call, unlike lazygit/lazydocker below.
+# The no-web build omits the bundled web server (14.5MB vs 18.3MB).
+case "$(uname -m)" in
+    x86_64)  ZELLIJ_ARCH="x86_64"  ;;
+    aarch64) ZELLIJ_ARCH="aarch64" ;;
+    *) echo "zellij: unsupported arch $(uname -m)" >&2; exit 1 ;;
+esac
+ZELLIJ_URL="https://github.com/zellij-org/zellij/releases/latest/download/zellij-no-web-${ZELLIJ_ARCH}-unknown-linux-musl.tar.gz"
+ZELLIJ_TMP="$(mktemp -d)"
+curl -fsSL "$ZELLIJ_URL" | tar -xz -C "$ZELLIJ_TMP" zellij
+# The published .sha256sum covers the extracted binary, not the archive, and the
+# URL replaces the .tar.gz suffix rather than appending to it.
+curl -fsSL "${ZELLIJ_URL%.tar.gz}.sha256sum" \
+    | awk -v bin="$ZELLIJ_TMP/zellij" '{print $1"  "bin}' | sha256sum -c -
+install -m 755 "$ZELLIJ_TMP/zellij" /usr/local/bin/zellij
+rm -rf "$ZELLIJ_TMP"
+
 # --- Shell config (on top of what dependsOn features provide) ---
 
 # zoxide: system binary, install directly to /usr/local/bin
