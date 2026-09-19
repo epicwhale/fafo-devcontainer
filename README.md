@@ -6,7 +6,7 @@ I found myself fighting with a swamp of configuration and long-build times every
 
 ## What's in the box
 
-- **Coding CLIs** — Claude Code, Google Antigravity (`agy`, gemini-cli's successor), OpenAI Codex, opencode — pre-installed with yolo-mode aliases
+- **Coding CLIs** — Claude Code, Google Antigravity (`agy`, gemini-cli's successor), OpenAI Codex, opencode v2 — pre-installed with yolo-mode aliases
 - **Superpowers** — [obra/superpowers](https://github.com/obra/superpowers) skills auto-installed for Claude, Codex, and opencode (Antigravity has no superpowers plugin yet)
 - **`skills` CLI** — [vercel-labs/skills](https://github.com/vercel-labs/skills) package manager for agent skills — `skills add <pkg>` works across Claude, Codex, opencode, and more
 - **DeepWiki MCP** — pre-wired for Claude and Codex for instant Q&A on any public GitHub repo
@@ -22,6 +22,7 @@ I found myself fighting with a swamp of configuration and long-build times every
 | `csy` | `claude --dangerously-skip-permissions --model sonnet` |
 | `ay`  | `agy --dangerously-skip-permissions` |
 | `xy`  | `codex --yolo` |
+| `opencode` | no alias needed — v2 allows all tools by default (asks only for paths outside the project and `.env` reads) |
 
 ## Quickstart
 

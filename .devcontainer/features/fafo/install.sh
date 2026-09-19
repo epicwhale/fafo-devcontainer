@@ -97,9 +97,10 @@ if [ "$INSTALLCLAUDE" = "true" ]; then
 fi
 
 if [ "$INSTALLOPENCODE" = "true" ]; then
+    # OpenCode v2 (the unversioned /install URL still serves v1).
     # --no-modify-path: we expose the binary system-wide via a /usr/local/bin
     # symlink below, so the installer doesn't need to edit .zshrc.
-    su "$_REMOTE_USER" -c "curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path" &
+    su "$_REMOTE_USER" -c "curl -fsSL https://opencode.ai/v2/install | bash -s -- --no-modify-path" &
     OPENCODE_PID=$!
 fi
 
@@ -128,8 +129,9 @@ fi
 [ -n "${OPENCODE_PID:-}" ]     && wait "$OPENCODE_PID"
 [ -n "${ANTIGRAVITY_PID:-}" ]  && wait "$ANTIGRAVITY_PID"
 
-# opencode installs to $HOME/.opencode/bin (not on default PATH). Expose it
-# system-wide so post-create.sh and other non-interactive scripts can find it.
+# opencode installs to $HOME/.opencode/bin (not on default PATH; v2 also drops an
+# `opencode2` alias shim there). Expose it system-wide so post-create.sh and
+# other non-interactive scripts can find it.
 if [ "$INSTALLOPENCODE" = "true" ]; then
     ln -sfn "$_REMOTE_USER_HOME/.opencode/bin/opencode" /usr/local/bin/opencode
 fi

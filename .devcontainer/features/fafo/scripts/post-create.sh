@@ -56,6 +56,9 @@ link_into_volume "$FAFO_DATA/npm-cache"        "$HOME/.npm"
 link_into_volume "$FAFO_DATA/claude-share"     "$HOME/.local/share/claude"
 link_into_volume "$FAFO_DATA/opencode-data"    "$HOME/.local/share/opencode"
 link_into_volume "$FAFO_DATA/opencode-config"  "$HOME/.config/opencode"
+# opencode: ~/.local/state/opencode is deliberately not persisted — it holds the
+# per-container background-service registration (service.json) and locks, which
+# would be stale after a rebuild.
 link_into_volume "$FAFO_DATA/gh"               "$HOME/.config/gh"
 # zellij: config + layouts only. ~/.cache/zellij is deliberately not persisted —
 # it's regenerable and version-keyed, so a stale cache is worse than none.
@@ -156,7 +159,17 @@ if ! codex mcp get deepwiki >/dev/null 2>&1; then
     || echo "⚠ Codex deepwiki MCP add failed (non-fatal)"
 fi
 
-# --- Superpowers for OpenCode ---
-# --global installs to user config; --force handles both install and update
-echo "Installing/updating superpowers for OpenCode..."
-opencode plugin "superpowers@git+https://github.com/obra/superpowers.git" --global --force || echo "⚠ OpenCode superpowers install failed (non-fatal)"
+# --- Superpowers for OpenCode (v2 plugin API; needs superpowers >= 6.4.1) ---
+# Migrate away from the opencode v1 install: older fafo builds wrote superpowers
+# under v1's singular "plugin" key, which v2's `plugin add`/`remove` don't
+# manage. Strip that entry so the config only carries the v2 "plugins" one.
+for f in "$HOME/.config/opencode/opencode.json" "$HOME/.config/opencode/opencode.jsonc"; do
+  if [ -f "$f" ]; then
+    sed -i '/"plugin"[[:space:]]*:/,/\]/{/obra\/superpowers/d}' "$f"
+  fi
+done
+
+# `opencode plugin add` is idempotent. ~/.cache/opencode isn't persisted, so
+# each rebuild fetches the latest superpowers commit on first load.
+echo "Installing superpowers for OpenCode..."
+opencode plugin add "superpowers@git+https://github.com/obra/superpowers.git" || echo "⚠ OpenCode superpowers install failed (non-fatal)"
